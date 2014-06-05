@@ -40,4 +40,5 @@ int main(void){
          sum
          );
 
+   return 0;
 }
