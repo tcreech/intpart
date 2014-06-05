@@ -1,7 +1,4 @@
 CPPFLAGS = -I.
-CFLAGS = -g -O0
-
-CC = clang
 
 all:	intpart_test
 
