@@ -106,6 +106,9 @@ int intpart_from_floatpart_chunked(int n, int *intpart, float* floatpart, int ch
    // If somehow we ended up with sum > n, I want to know!
    assert(sum <= n);
 
+   // Ensure that we got as close as possible.
+   assert((n - sum) <= (n % chunksize));
+
 finish:
    free(diffs);
 
