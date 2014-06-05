@@ -37,6 +37,11 @@ int intpart_equipartition_chunked(int n, int* intpart, int chunksize, int l){
  * intpart, which is assumed to be memory pointing to l ints' worth of space.
  * The partitions written to intpart will be multiples of chunksize.
  *
+ * Generally, the goals for the partition are:
+ * 1) If no true partition is possible due to chunking, prefer summing to less
+ *    than n.
+ * 2) Avoid empty partitions.
+ *
  * NOTE: If floatpart sums to greater than 1, then intpart will sum to
  * greater than n. For now, I want to ensure that this never happens, so this
  * code will hit an assert if intpart ever sums to greater than 1.
@@ -69,12 +74,18 @@ int intpart_from_floatpart_chunked(int n, int *intpart, float* floatpart, int ch
       float maxdiff = 0;
       // Find the partition with the greatest difference. Our hope is that
       // there are not too many chunks leftover, so this won't have to be done
-      // too many times!
+      // too many times! If we find a partition that is empty, give it
+      // something first.
       for(i=0; i<l; i++){
          //printf("diffs[%d] = %f (%d from %f)\n", i, diffs[i], intpart[i], (floatpart[i]*in));
          if(diffs[i] > maxdiff){
             maxi = i;
             maxdiff = diffs[i];
+         }
+         if(intpart[i]==0){
+            maxi = i;
+            maxdiff = diffs[i];
+            break;
          }
       }
       //printf("partition with greatest difference is at %d (%f).\n\n", maxi, maxdiff);
@@ -102,9 +113,14 @@ int intpart_from_floatpart_chunked(int n, int *intpart, float* floatpart, int ch
    int sum = 0;
    for(i=0; i<l; i++)
       sum += intpart[i];
-
-   // If somehow we ended up with sum > n, I want to know!
    assert(sum <= n);
+
+
+   // Find the min; ensure it is not zero.
+   int minp = n;
+   for(i=0; i<l; i++)
+      minp = (intpart[i] < minp ? intpart[i] : minp);
+   assert(minp > 0);
 
    // Ensure that we got as close as possible.
    assert((n - sum) <= (n % chunksize));
