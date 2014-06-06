@@ -60,6 +60,10 @@ int intpart_from_floatpart_chunked(int n, int *intpart, float* floatpart, int ch
    // Intermediate "n". This is just the number of chunks given the chunksize.
    remaining_chunks = in = n / chunksize;
 
+   // Do nothing if there is no way to create a partitioning.
+   if(remaining_chunks < l)
+      return -1;
+
    // Keep track of the offset due to integerness. (perfect - integer.)
    diffs = malloc(sizeof(float) * l);
 
