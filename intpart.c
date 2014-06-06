@@ -53,6 +53,10 @@ int intpart_from_floatpart_chunked(int n, int *intpart, float* floatpart, int ch
    int i, in, remaining_chunks;
    float *diffs;
 
+   // Do nothing and exit early if some argument doesn't make sense.
+   if(n < 1 || intpart == NULL || floatpart == NULL || chunksize < 1 || l < 1)
+      return -1;
+
    // Intermediate "n". This is just the number of chunks given the chunksize.
    remaining_chunks = in = n / chunksize;
 
