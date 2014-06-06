@@ -21,7 +21,21 @@ int main(int argc, char** argv){
    }
 
    int n = 240;
-   int chunksize = 4;
+   int chunksize = 1;
+   char *chunksizeenv = getenv("CHUNKSIZE");
+   if(chunksizeenv)
+      chunksize=atoi(chunksizeenv);
+   if(!chunksize >= 1){
+      printf("invalid chunksize! must be >= 1.\n");
+      return 1;
+   }
+   char *nenv = getenv("N");
+   if(nenv)
+      n = atoi(nenv);
+   if(!n >= 1){
+      printf("invalid n value! must be >= 1.\n");
+      return 1;
+   }
 
    printf("floatpart = {%f, %f, %f}\n",
          floatpart[0],
