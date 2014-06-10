@@ -1,6 +1,7 @@
 #include <intpart.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <float.h>
 #include <assert.h>
 
 /*
@@ -79,8 +80,8 @@ int intpart_from_floatpart_chunked(int n, int *intpart, float* floatpart, int ch
    // Distribute remaining chunks to the partitions with the greatest
    // difference from their perfect portion.
    while(remaining_chunks > 0){
-      int maxi = 0;
-      float maxdiff = 0;
+      int maxi = -1;
+      float maxdiff = -FLT_MAX;
       // Find the partition with the greatest difference. Our hope is that
       // there are not too many chunks leftover, so this won't have to be done
       // too many times! If we find a partition that is empty, give it
@@ -101,6 +102,48 @@ int intpart_from_floatpart_chunked(int n, int *intpart, float* floatpart, int ch
       remaining_chunks--;
       intpart[maxi] = intpart[maxi] + 1;
       diffs[maxi] = (floatpart[maxi]*in) - (float)(intpart[maxi]);
+   }
+
+   // It's still possible that there are emtpy partitions. If so, find them and
+   // steal chunks for them from the partitions with the greatest diffs.
+   int empty = -1;
+   for(i=0; i<l; i++){
+      if(intpart[i]==0){
+         empty = i;
+         break;
+      }
+   }
+   while(empty >= 0){
+      int maxi = -1;
+      float maxdiff = -FLT_MAX;
+      // Find the partition with the greatest difference and multiple chunks.
+      // There *has* to be one with multiple chunks if we have empty
+      // partitions.
+      for(i=0; i<l; i++){
+         if(intpart[i] < 2)
+            continue;
+         if(diffs[i] > maxdiff){
+            maxi = i;
+            maxdiff = diffs[i];
+         }
+      }
+      assert(maxi >= 0);
+
+      // Got one to steal from.
+      intpart[maxi]--;
+      intpart[empty]++;
+      // Update diffs.
+      diffs[maxi] = (floatpart[maxi]*in) - (float)(intpart[maxi]);
+      diffs[empty] = (floatpart[empty]*in) - (float)(intpart[empty]);
+
+      // Check if there is still some empty partition.
+      empty = -1;
+      for(i=0; i<l; i++){
+         if(intpart[i]==0){
+            empty = i;
+            break;
+         }
+      }
    }
 
    // Expand the partition back up by the chunking factor.
