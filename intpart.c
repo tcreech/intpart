@@ -141,3 +141,33 @@ finish:
    return 0;
 }
 
+/*
+ * Calls intpart_from_floatpart_chunked with floatpart "normalized" using the
+ * normalization weight normweight. The floatpart passed to
+ * intpart_from_floatpart_chunked will be normalized to sum to one after
+ * normweight is added to each floatpart item. For example, Passing
+ * normweight=0 has no effect. Passing normweight as a value very large
+ * relative to the items in normweight will result in a partitioning
+ * approaching equipartitioning.
+ */
+int intpart_from_floatpart_chunked_normalized(int n, int *intpart, float* floatpart, int chunksize, float normweight, int l){
+   float *normfloatpart = malloc(sizeof(float) * l);
+   int i;
+   float sum = 0;
+   for(i=0; i<l; i++){
+      normfloatpart[i] = floatpart[i] + normweight;
+      sum += normfloatpart[i];
+   }
+   for(i=0; i<l; i++){
+      normfloatpart[i] /= sum;
+   }
+
+   int ret;
+   ret = intpart_from_floatpart_chunked(n, intpart, normfloatpart, chunksize, l);
+
+finish:
+   free(normfloatpart);
+
+   return ret;
+}
+

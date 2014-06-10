@@ -76,6 +76,19 @@ int main(int argc, char** argv){
    }
    printf("}; sum = %d\n", sum);
 
+   float normweight = 0.0;
+   printf("weighted with %02.2f gives:\n", normweight);
+   intpart_from_floatpart_chunked_normalized(n, intpart, floatpart, chunksize, normweight, l);
+
+   sum = 0;
+   for(i=0; i<l; i++){ sum += intpart[i]; }
+   printf("intpart = {");
+   for(i=0; i<l; i++){
+      printf("%d",intpart[i]);
+      if(i<l-1)
+         printf(", ");
+   }
+   printf("}; sum = %d\n", sum);
 
    free(floatpart);
    free(intpart);
