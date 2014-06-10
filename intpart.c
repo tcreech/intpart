@@ -76,7 +76,6 @@ int intpart_from_floatpart_chunked(int n, int *intpart, float* floatpart, int ch
       diffs[i] = (floatpart[i]*in) - (float)(intpart[i]);
    }
 
-   //printf("%d/%d chunks remain.\n", remaining_chunks, in);
    // Distribute remaining chunks to the partitions with the greatest
    // difference from their perfect portion.
    while(remaining_chunks > 0){
@@ -87,7 +86,6 @@ int intpart_from_floatpart_chunked(int n, int *intpart, float* floatpart, int ch
       // too many times! If we find a partition that is empty, give it
       // something first.
       for(i=0; i<l; i++){
-         //printf("diffs[%d] = %f (%d from %f)\n", i, diffs[i], intpart[i], (floatpart[i]*in));
          if(diffs[i] > maxdiff){
             maxi = i;
             maxdiff = diffs[i];
@@ -98,20 +96,13 @@ int intpart_from_floatpart_chunked(int n, int *intpart, float* floatpart, int ch
             break;
          }
       }
-      //printf("partition with greatest difference is at %d (%f).\n\n", maxi, maxdiff);
 
       // Distribute a remaining chunk here.
       remaining_chunks--;
       intpart[maxi] = intpart[maxi] + 1;
       diffs[maxi] = (floatpart[maxi]*in) - (float)(intpart[maxi]);
 
-      //printf("%d/%d chunks remain.\n", remaining_chunks, in);
       assert(remaining_chunks >= 0);
-   }
-
-   //TODO: remove me. For debug only.
-   for(i=0; i<l; i++){
-      //printf("diffs[%d] = %f (%d from %f)\n", i, diffs[i], intpart[i], (floatpart[i]*in));
    }
 
    // Expand the partition back up by the chunking factor.
