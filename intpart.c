@@ -101,8 +101,6 @@ int intpart_from_floatpart_chunked(int n, int *intpart, float* floatpart, int ch
       remaining_chunks--;
       intpart[maxi] = intpart[maxi] + 1;
       diffs[maxi] = (floatpart[maxi]*in) - (float)(intpart[maxi]);
-
-      assert(remaining_chunks >= 0);
    }
 
    // Expand the partition back up by the chunking factor.
