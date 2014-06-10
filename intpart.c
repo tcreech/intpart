@@ -22,12 +22,14 @@ int intpart_equipartition(int n, int* intpart, int l){
  * possible.
  */
 int intpart_equipartition_chunked(int n, int* intpart, int chunksize, int l){
-   int i;
+   int i, ret;
    float *floatpart = malloc(sizeof(float) * l);
    float each = 1.0 / ((float)l);
    for(i=0; i<l; i++)
       floatpart[i] = each;
-   return intpart_from_floatpart_chunked(n, intpart, floatpart, chunksize, l);
+   ret = intpart_from_floatpart_chunked(n, intpart, floatpart, chunksize, l);
+   free(floatpart);
+   return ret;
 }
 
 /*
