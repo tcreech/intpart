@@ -27,6 +27,8 @@ int main(int argc, char** argv){
       chunksize=atoi(chunksizeenv);
    if(!chunksize >= 1){
       printf("invalid chunksize! must be >= 1.\n");
+      free(floatpart);
+      free(intpart);
       return 1;
    }
    char *nenv = getenv("N");
@@ -34,6 +36,8 @@ int main(int argc, char** argv){
       n = atoi(nenv);
    if(!n >= 1){
       printf("invalid n value! must be >= 1.\n");
+      free(floatpart);
+      free(intpart);
       return 1;
    }
 
@@ -72,5 +76,8 @@ int main(int argc, char** argv){
    }
    printf("}; sum = %d\n", sum);
 
+
+   free(floatpart);
+   free(intpart);
    return 0;
 }
