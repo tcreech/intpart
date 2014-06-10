@@ -104,7 +104,7 @@ int intpart_from_floatpart_chunked(int n, int *intpart, float* floatpart, int ch
       diffs[maxi] = (floatpart[maxi]*in) - (float)(intpart[maxi]);
    }
 
-   // It's still possible that there are emtpy partitions. If so, find them and
+   // It's still possible that there are empty partitions. If so, find them and
    // steal chunks for them from the partitions with the greatest diffs.
    int empty = -1;
    for(i=0; i<l; i++){
