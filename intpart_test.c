@@ -41,11 +41,15 @@ int main(int argc, char** argv){
       return 1;
    }
 
-   printf("floatpart = {%f, %f, %f}\n",
-         floatpart[0],
-         floatpart[1],
-         floatpart[2]
-         );
+   int i;
+   printf("floatpart = {");
+   for(i=0; i<l; i++){
+       printf("%f", floatpart[i]);
+       if(i<l-1)
+           printf(", ");
+   }
+   printf("};\n");
+
    printf("n = %d\n", n);
    printf("chunksize = %d\n", chunksize);
    printf("\n");
@@ -53,7 +57,6 @@ int main(int argc, char** argv){
    intpart_from_floatpart_chunked(n, intpart, floatpart, chunksize, l);
 
    int sum = 0;
-   int i;
    for(i=0; i<l; i++){ sum += intpart[i]; }
    printf("intpart = {");
    for(i=0; i<l; i++){
