@@ -50,7 +50,7 @@ int main(void){
          intpart = realloc(intpart, sizeof(int)*len);
          int i;
          for(i=0; i<len; i++){
-            floatpart[i] = ((double)rand_r(&seed) / (double)RAND_MAX) * len;
+            floatpart[i] = 1e-9 + ((double)rand_r(&seed) / (double)RAND_MAX) * len;
          }
 
          int ret;
