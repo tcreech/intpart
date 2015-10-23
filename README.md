@@ -2,11 +2,11 @@
 
 ### What is intpart for? ###
 
-* Trivial but unfortunately necessary code for creating an integer partition given certain constraints.
+* Silly but unfortunately necessary code for creating an integer partition given certain constraints.
 
-### How do I get set up? ###
+### Can you give an example? ###
 
-* make
+* Say you have 16 discrete resources, and you want to partition them up among 4 users at arbitrary ratios respecting fractions ( 1/6, 1/4, 1/3, 1/4 ). `intpart`  can help you to create an *integer* partitioning of 16 which best respects this goal.
 
 ### Who do I talk to? ###
 
