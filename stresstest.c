@@ -26,7 +26,7 @@ void printout(int *intpart, float *floatpart, int l){
 
 int main(void){
 
-//#pragma omp parallel
+#pragma omp parallel
    {
       unsigned int seed;
       double last_print = omp_get_wtime();
@@ -59,13 +59,16 @@ int main(void){
          testcount++;
          double now = omp_get_wtime();
          if(now - last_print > 10.0){
-            printf("Thread %d: %d tests/s.\n", omp_get_thread_num(), (double)(testcount-lasttestcount)/(double)(now - last_print));
-            lasttestcount = testcount;
-            last_print = now;
+#pragma omp critical
+            {
+               printf("Thread %d: %1.3f Mtests/s.\n", omp_get_thread_num(), (double)(testcount-lasttestcount)/(double)(now - last_print)*1e-6);
+               lasttestcount = testcount;
+               last_print = now;
 
-            printf("len=%d, chunk=%d, n=%d\n", len, chunk, n);
-            printout(intpart, floatpart, len);
-            printf("\n");
+               printf("len=%d, chunk=%d, n=%d\n", len, chunk, n);
+               printout(intpart, floatpart, len);
+               printf("\n");
+            }
          }
       }
    }
