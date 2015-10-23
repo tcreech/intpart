@@ -25,6 +25,7 @@ void printout(int *intpart, float *floatpart, int l){
 }
 
 int main(void){
+    float total_mtests = 0;
 
 #pragma omp parallel
    {
@@ -35,6 +36,7 @@ int main(void){
       seed = time(NULL);
       float *floatpart = malloc(0);
       int *intpart = malloc(0);
+      float my_mtests = 0;
 
       unsigned j;
       for(j=0; j<1024*1024*1024; j++){
@@ -58,10 +60,14 @@ int main(void){
                   len, n, chunk, ret);
          testcount++;
          double now = omp_get_wtime();
-         if(now - last_print > 10.0){
+         if(now - last_print > 4.0){
 #pragma omp critical
             {
-               printf("Thread %d: %1.3f Mtests/s.\n", omp_get_thread_num(), (double)(testcount-lasttestcount)/(double)(now - last_print)*1e-6);
+               total_mtests -= my_mtests;
+               my_mtests = (double)(testcount-lasttestcount)/(double)(now - last_print)*1e-6;
+               total_mtests += my_mtests;
+
+               printf("Thread %d: %1.3f Mtests/s. Total: %1.3f Mtests/s.\n", omp_get_thread_num(), my_mtests, total_mtests);
                lasttestcount = testcount;
                last_print = now;
 
